@@ -1,22 +1,20 @@
 <?php
+
 session_start();
 
 // Check if the user is not logged in and redirect to the login page
-//if (!isset($_SESSION["employer_email"])) {
-    //header("Location: login.php");
-    //exit();
-//}
-
 include 'dbconnect.php';
 
-// Retrieve employer details
-//$email = $_SESSION["employer_email"];
-$email = "ch3ngw3n0331@gmail.com";
+if (isset($_SESSION['employer_email'])) {
+    $email = $_SESSION['employer_email'];
+    // Rest of the code for retrieving employer details
+
+//$email = "ch3ngw3n0331@gmail.com";
 $stmt = $conn->prepare("SELECT * FROM tbl_employer WHERE employer_email = :email");
 $stmt->bindParam(':email', $email);
 $stmt->execute();
 $employer = $stmt->fetch(PDO::FETCH_ASSOC);
-
+}
 // Retrieve total employee count
 $stmt = $conn->query("SELECT COUNT(*) AS total_employee FROM tbl_employee");
 $total_employee = $stmt->fetch(PDO::FETCH_ASSOC)['total_employee'];
@@ -46,15 +44,26 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['selectedDepartment'])) {
                 $selectedDepartment = $_POST['selectedDepartment'];
 
-                // Prepare the SQL query to search for matching records in tbl_employee based on the selected department
-                $stmt = $conn->prepare("SELECT e.employee_id, e.employee_name, e.employee_department, IF(c.employee_id IS NULL, 'Absent', 'Present') AS status, c.checkin_date, c.checkin_time
+                // Prepare the SQL query to search for matching records in tbl_employee based on the selected department            
+                if ($selectedDepartment === "All") {
+                    // Retrieve all employee data
+                    $stmt = $conn->query("SELECT e.employee_id, e.employee_name, e.employee_department, IF(c.employee_id IS NULL, 'Absent', 'Present') AS status, c.checkin_date, c.checkin_time
                                         FROM tbl_employee e
                                         LEFT JOIN tbl_checkin c ON e.employee_id = c.employee_id
-                                        WHERE e.employee_department = :department AND c.employee_id IS NOT NULL
                                         ORDER BY c.checkin_date DESC");
-                $stmt->bindValue(':department', $selectedDepartment, PDO::PARAM_STR);
-                $stmt->execute();
-                $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } 
+                else {
+                    // Prepare the SQL query to search for matching records in tbl_employee based on the selected department
+                    $stmt = $conn->prepare("SELECT e.employee_id, e.employee_name, e.employee_department, IF(c.employee_id IS NULL, 'Absent', 'Present') AS status, c.checkin_date, c.checkin_time
+                                            FROM tbl_employee e
+                                            LEFT JOIN tbl_checkin c ON e.employee_id = c.employee_id
+                                            WHERE e.employee_department = :department 
+                                            ORDER BY c.checkin_date DESC");
+                    $stmt->bindValue(':department', $selectedDepartment, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
                 if (count($employees) === 0) {
                     // No records found for the selected department
                     $noRecordsFound = true;
@@ -454,6 +463,7 @@ else {
                                 <div id="dropdownContent" class="dropdown-content">
                                     <a href="#" class="option1" onclick="selectOption('Department'); toggleDepartmentDropdown();">Department</a>
                                     <div id="departmentDropdown" class="sub-dropdown">
+                                    <a href="#" name= "AllHuman Resources" onclick="selectDepartment('All')">All</a>
                                     <a href="#" name= "Human Resources" onclick="selectDepartment('Human Resources')">Human Resources</a>
                                     <a href="#" name= "Finance and Accounting" onclick="selectDepartment('Finance and Accounting')">Finance and Accounting</a>
                                     <a href="#" name= "Sales and Marketing" onclick="selectDepartment('Sales and Marketing')">Sales and Marketing</a>

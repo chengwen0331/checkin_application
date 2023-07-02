@@ -15,14 +15,14 @@ if (isset($_POST["submit"])) {
     if ($number_of_rows  > 0) {
         foreach ($rows as $user)
         {
-            $user_name = $user['user_name'];
-            $user_phone = $user['user_phone'];
+            $employer_name = $user['employer_name'];
+            $employer_phone = $user['employer_phone'];
         }
         session_start();
         $_SESSION["sessionid"] = session_id();
-        $_SESSION["user_email"] = $email;
-        $_SESSION["user_name"] = $user_name;
-        $_SESSION["user_phone"] = $user_phone;
+        $_SESSION["employer_email"] = $email;
+        $_SESSION["employer_name"] = $employer_name;
+        $_SESSION["employer_phone"] = $employer_phone;
         echo "<script>alert('Login Success');</script>";
         echo "<script> window.location.replace('index.php')</script>";
     }else{
