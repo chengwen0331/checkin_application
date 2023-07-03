@@ -31,11 +31,19 @@ if (isset($_GET['submit']) && $_GET['submit'] == "search") {
     $search = $_GET['search'];
 
     // Prepare the SQL query to search for matching records in tbl_employee
-    $stmt = $conn->prepare("SELECT e.employee_id, e.employee_name, e.employee_department, IF(c.employee_id IS NULL, 'Absent', 'Present') AS status, c.checkin_date, c.checkin_time
-                            FROM tbl_employee e
-                            LEFT JOIN tbl_checkin c ON e.employee_id = c.employee_id
-                            WHERE e.employee_name LIKE :search
-                            ORDER BY c.checkin_date DESC");
+    if (is_numeric($search)) {
+        $stmt = $conn->prepare("SELECT e.employee_id, e.employee_name, e.employee_department, IF(c.employee_id IS NULL, 'Absent', 'Present') AS status, c.checkin_date, c.checkin_time
+                                FROM tbl_employee e
+                                LEFT JOIN tbl_checkin c ON e.employee_id = c.employee_id
+                                WHERE e.employee_id LIKE :search
+                                ORDER BY c.checkin_date DESC");
+    } else {
+        $stmt = $conn->prepare("SELECT e.employee_id, e.employee_name, e.employee_department, IF(c.employee_id IS NULL, 'Absent', 'Present') AS status, c.checkin_date, c.checkin_time
+                                FROM tbl_employee e
+                                LEFT JOIN tbl_checkin c ON e.employee_id = c.employee_id
+                                WHERE e.employee_name LIKE :search
+                                ORDER BY c.checkin_date DESC");
+    }
     $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
     $stmt->execute();
     $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -91,6 +99,7 @@ else {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <!-- Add your CSS stylesheets and other head elements here -->
     <style>
@@ -105,27 +114,6 @@ else {
             width: 100%;
             height: 100vh;        
         }
-        .background-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("images/picture.png");
-            background-size: cover;
-            background-position: center;
-            z-index: -1;
-            }
-
-            .background-image::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency and color as needed */
-            }
         .container-1{
             background: white;
             
@@ -162,7 +150,7 @@ else {
         }
 
         .profile-box{
-            background:grey;
+            background: rgb(186,211,232);
         }
         .profile-container {
             position: relative;
@@ -191,7 +179,7 @@ else {
             right: -300px; /* Initially hide the profile details to the right */
             height: auto;
             width: 400px;
-            background-color: #fff;
+            background-color: rgb(237, 243, 247);
             box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             padding: 10px;
             z-index: 999;
@@ -234,8 +222,8 @@ else {
         }
 
         .profile-img img {
-            width: 90%;
-            height: 90%;
+            width: 80%;
+            height: 80%;
             object-fit: cover;
         }
 
@@ -431,7 +419,7 @@ else {
                     <div class="profile-details">
                         <button class="cancel-button" onclick="toggleProfile()"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button><br><br>
                         <div class="profile-img">
-                            <img src="images/profile.png">
+                            <img src="images/employer.png">
                         </div>
                         <p><strong>Name:</strong> <?php echo $employer['employer_name']; ?></p>
                         <p><strong>Email:</strong> <?php echo $employer['employer_email']; ?></p>

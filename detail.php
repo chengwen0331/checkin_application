@@ -48,6 +48,7 @@ if (isset($_GET['employee_id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
     <style>
         .container {
             display: flex;
@@ -70,8 +71,8 @@ if (isset($_GET['employee_id'])) {
         }
 
         .employee-image {
-            width: 400px;
-            height: 400px;
+            width: 300px;
+            height: 300px;
             margin-bottom: 20px;
         }
 
@@ -112,7 +113,7 @@ if (isset($_GET['employee_id'])) {
             <button class="cancel-button"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
         </a>
         <div class="left">
-            <img class="employee-image" src="images/profile.png" alt="Employee Image">
+            <img class="employee-image" src="images/employer.png" alt="Employee Image">
         </div>
         <div class="right">
                  

@@ -23,6 +23,7 @@ if (isset($_POST["submit"])) {
         $_SESSION["employer_email"] = $email;
         $_SESSION["employer_name"] = $employer_name;
         $_SESSION["employer_phone"] = $employer_phone;
+        
         echo "<script>alert('Login Success');</script>";
         echo "<script> window.location.replace('index.php')</script>";
     }else{
@@ -43,6 +44,7 @@ if (isset($_POST["submit"])) {
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="icon" type="image/x-icon" href="images/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
@@ -50,35 +52,55 @@ if (isset($_POST["submit"])) {
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
         <style>
+            .background-image {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-image: url("images/picture.png");
+              background-size: cover;
+              background-position: center;
+              z-index: -1;
+            }
+
+              .background-image::before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency and color as needed */
+            }
             .copy-right {
-                background-color: transparent;
+                background-color: black;
                 padding: 22px;
                 text-align: center;
                 font-size:20px;
-                margin-top:20px;
-                color:black;
+                margin-top:43px;
+                color:white;
                 border-top: 1px solid lightgrey;
             }
         </style>
     </head> 
 <body>
-      <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:50px">
-         <div class="w3-row w3-card">
-         <div class="w3-half w3-container" style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
-          <img class="w3-image w3-center w3-padding" style="width:100%; height:100%;object-fit:cover;" src="images/login.png">
-        </div>
-            <div class="w3-half w3-container" style="margin-top: 50px; margin-bottom:50px;">
-               <h4 style="font-size: 40px; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-bottom:40px;">Login</h4>
+    <div class="background-image"></div>
+      <div class="w3-main w3-content w3-padding" style="max-width:600px;margin-top:120px;border-radius:5px;">
+         <div class="w3-row w3-card" style="background: #f8f8f8; display: flex; justify-content: center; align-items: center;border-radius:10px;">
+         
+            <div class="w3-container" style="margin-top: 50px; margin-bottom:50px; ; width: 80%;">
+               <h4 style="font-size: 40px; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-bottom:40px; text-align:center;">Login</h4>
                <form name="loginForm" class=""  action="login.php" method="post">
                   <p>
-                     <label style="color: #004891;">
+                     <label style="color: rgb(22, 36, 120);">
                      <b style="margin-top: 10px;">Email</b>
                      </label>
                      <input class="w3-input w3-border w3-round" name="email" type="email" id="idemail" required>
                   </p>
                   <p>
-                     <label style="color: #004891;">
-                     <b style="margin-top: 10px;">Password</b>
+                     <label style="color: rgb(22, 36, 120);">
+                      <b style="margin-top: 10px;">Password</b>
                      </label>
                      <div class="input-group">
                         <input class="w3-input w3-border w3-round" name="password" type="password" id="idpass" required>
@@ -87,18 +109,19 @@ if (isset($_POST["submit"])) {
                         </button>
                     </div>
                   </p>
-                  <p>
-                     <input class="w3-check" style="margin-top: 10px;" type="checkbox" id="idremember" name="remember" onclick="rememberMe()">
-                     <label>Remember Me</label>
+                  <p style="display: flex; align-items: center; margin-top: 10px;">
+                    <input class="w3-check" type="checkbox" id="idremember" name="remember" onclick="rememberMe()" style="margin-right: 10px;">
+                    <label for="idremember" style="margin-right: 10px; display: flex;">Remember Me</label>
+                    <span style="margin-left: auto;">
+                      <a href="#" style="text-decoration: none;">Forgot password?</a>
+                    </span>
                   </p>
+
+
                   <p>
-                     <button class="button w3-btn w3-round w3-block" style="margin-top: 30px;" name="submit" value="login">Login</button>
+                     <button class="button w3-btn w3-round w3-block" style="margin-top: 30px; background:rgb(21, 29, 79);" name="submit" value="login">Login</button>
                   </p>
                </form>
-
-               <p style="margin-top: 30px; font-size:medium;">Dont have an account.  <a href="#" style="text-decoration:none;"> Create here.</a><br>
-               Forgot your password?  <a href="#" style="text-decoration:none;" onclick="document.getElementById('id01').style.display='block';return false;"> Click here.</a>
-               </p>
 
             </div>
          </div>
